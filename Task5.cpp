@@ -8,20 +8,18 @@ const std::string file_name_q = "questions.txt";
 const std::string path_a = "answer.txt";
 const std::string path_q = "questions.txt";
 
-void check(std::string & file_answer) {
-	std::string answer;
-	do {
-		if (answer == "0") {
-			std::cout << "\nAnswer is: " << file_answer;
-		}
-		else if (!answer.empty()) {
-			std::cout << "\nWrong answer!";
-		}		
-		std::cout << "\nEnter your answer in low register." << std::endl;
-		std::cout << "If you need a clue enter (0).\nEnter: ";
-		std::getline(std::cin >> std::ws , answer);
-	} while (answer != file_answer);
-	std::cout << "\nThat correct answer!" << std::endl;
+void check(std::string & file_answer,int & player_score,int & spectators_score) {
+	std::string answer;	
+	std::cout << "\nEnter your answer in low register." << std::endl;	
+	std::cin >> answer;
+    if(answer == file_answer) {
+        std::cout << "\nThat correct answer!" << std::endl;
+        ++player_score;
+    }	
+	else {
+        std::cout<<"\nWrong answer, answer is: " << file_answer << ". Spectators gain point !";
+        ++spectators_score;
+    }
 	std::cout << '\n' + std::string(20, '-') + '\n';
 }
 
@@ -38,6 +36,8 @@ int main() {
 	else {
 		std::string array(13, 'n');
 		int shift = 0;
+        int player_score = 0;
+        int spectators_score =0;
 		do {
 			std::string question;
 			std::string answer_file;
@@ -62,15 +62,21 @@ int main() {
 			file_name_a.seekg(0);
 			file_name_q.seekg(0);			
 			for (int i = 0; i <= shift;++i) {
-				std::getline(file_name_a , answer_file);
+				file_name_a >> answer_file;
 				std::getline(file_name_q, question);				
 			}
 			std::cout << '\n' + std::string(20, '-') + '\n';
 			std::cout << "\n" << question;				
-			check(answer_file);
+			check(answer_file,player_score,spectators_score);
 			array[shift] = 'y';						
-		} while (shift != -1 && array != std::string(13,'y'));
-	}
+		} while (spectators_score < 6 && player_score < 6);
+        if(player_score == 6) {
+            std::cout<<"\nYou win !";
+        }
+        else {
+            std::cout<<"\nSpeactotots win!";
+        }
+	}    
 	file_name_a.close();
 	file_name_q.close();
 }
