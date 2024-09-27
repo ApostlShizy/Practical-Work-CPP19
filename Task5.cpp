@@ -41,14 +41,13 @@ int main() {
 		do {
 			std::string question;
 			std::string answer_file;
-			std::cout << "\nTo exit enter (-1)";
 			std::cout << "\nEnter shift: ";
 			std::cin >> shift;
 			if (!std::cin) {
 				std::cerr << "\nWrong input need a number!";
 				return 1;
 			}
-			if (array[shift] == 'y' || shift >= array.length()) {
+			if (array[shift] != 'n' || shift >= array.length()) {
 				int i = 0;
 				do {
 					if (i + shift >= array.length()) {
